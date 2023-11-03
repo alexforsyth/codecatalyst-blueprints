@@ -1,0 +1,6 @@
+{
+  "gitUrl": "https://github.com/axios/axios.git",
+  "advanced": {
+    "limitHistory": true
+  }
+}
