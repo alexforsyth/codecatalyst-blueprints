@@ -1,8 +1,9 @@
 import * as cp from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
-import { Blueprint as ParentBlueprint, Options as ParentOptions } from '@amazon-codecatalyst/blueprints.blueprint';
+import { MergeStrategies, Blueprint as ParentBlueprint, Options as ParentOptions } from '@amazon-codecatalyst/blueprints.blueprint';
 import defaults from './defaults.json';
+import { BlueprintOwnershipFile, SourceRepository } from '@amazon-codecatalyst/blueprint-component.source-repositories';
 
 /**
  * This is the 'Options' interface. The 'Options' interface is interpreted by the wizard to dynamically generate a selection UI.
@@ -15,11 +16,10 @@ import defaults from './defaults.json';
 export interface Options extends ParentOptions {
   /**
    * This executes git clone with the provided git url. This works on repositories up to 200mb in size.
-   * ```
-   * Using private repos:
-   * https://<username>:<password>@github.com/username/repository.git
-   * ```
+   * <br>
+   * Using private repos: https://\<username\>:\<password\>@github.com/username/repository.git
    * @placeholder https://<username>:<password>@github.com/username/repository.git
+   * @displayName Repository Git Url
    * @validationRegex .*
    */
   gitUrl: string;
@@ -53,6 +53,37 @@ export class Blueprint extends ParentBlueprint {
       ...defaults,
     };
     const options = Object.assign(typeCheck, options_);
+
+    const sourceRepo = new SourceRepository(this, {
+      title: 'my-repo',
+    });
+    sourceRepo.setResynthStrategies([
+      {
+        identifier: 'dont-override-sample-code',
+        description: 'This strategy is applied accross all sample code. The blueprint will create sample code, but skip attempting to update it.',
+        strategy: MergeStrategies.neverUpdate,
+        globs: [
+          '**/src/**',
+          '**/css/**',
+        ],
+      },
+    ]);
+
+    new BlueprintOwnershipFile(sourceRepo, {
+      resynthesis: {
+        strategies: [
+          {
+            identifier: 'dont-override-sample-code',
+            description: 'This strategy is applied accross all sample code. The blueprint will create sample code, but skip attempting to update it.',
+            strategy: MergeStrategies.neverUpdate,
+            globs: [
+              '**/src/**',
+              '**/css/**',
+            ],
+          },
+        ],
+      },
+    });
 
     if (options.gitUrl) {
       const outputLocation = path.join(this.outdir, 'src');
