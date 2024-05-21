@@ -357,6 +357,33 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@amazon-codecatalyst/blueprints.import-project@workspace:packages/blueprints/import-project":
+  version: 0.0.0-use.local
+  resolution: "@amazon-codecatalyst/blueprints.import-project@workspace:packages/blueprints/import-project"
+  dependencies:
+    "@amazon-codecatalyst/blueprint-component.environments": ^0.3.82
+    "@amazon-codecatalyst/blueprint-component.source-repositories": ^0.3.82
+    "@amazon-codecatalyst/blueprint-component.workflows": ^0.3.82
+    "@amazon-codecatalyst/blueprint-util.cli": ^0.3.82
+    "@amazon-codecatalyst/blueprint-util.projen-blueprint": ^0.3.82
+    "@amazon-codecatalyst/blueprints.blueprint": ^0.3.82
+    "@types/node": ^18
+    "@types/yaml": "*"
+    "@typescript-eslint/eslint-plugin": ^5
+    "@typescript-eslint/parser": ^5
+    eslint: ^8
+    eslint-import-resolver-node: ^0.3.7
+    eslint-import-resolver-typescript: ^3.5.5
+    eslint-plugin-import: ^2.25.4
+    npm-check-updates: ^16
+    projen: 0.71.112
+    standard-version: ^9
+    ts-node: ^10
+    typescript: ^4.x
+    yaml: "*"
+  languageName: unknown
+  linkType: soft
+
 "@amazon-codecatalyst/blueprints.launch-blueprint@workspace:packages/blueprints/launch-blueprint":
   version: 0.0.0-use.local
   resolution: "@amazon-codecatalyst/blueprints.launch-blueprint@workspace:packages/blueprints/launch-blueprint"
