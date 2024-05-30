@@ -1,11 +1,20 @@
 // import * as cp from 'child_process';
+// import * as cp from 'child_process';
 import * as crypto from 'crypto';
 import * as fs from 'fs';
 import path from 'path';
 // import { Environment } from '@amazon-codecatalyst/blueprint-component.environments';
 // import { SourceRepository } from '@amazon-codecatalyst/blueprint-component.source-repositories';
-import { KVSchema, OptionsSchemaDefinition, Blueprint as ParentBlueprint, Options as ParentOptions } from '@amazon-codecatalyst/blueprints.blueprint';
+import {
+  BlueprintSynthesisError,
+  BlueprintSynthesisErrorTypes,
+  KVSchema,
+  OptionsSchemaDefinition,
+  Blueprint as ParentBlueprint,
+  Options as ParentOptions,
+} from '@amazon-codecatalyst/blueprints.blueprint';
 // eslint-disable-next-line import/no-extraneous-dependencies
+import { unpackBundle, writeAsFile } from './bundle-utils';
 import defaults from './defaults.json';
 
 export interface Options extends ParentOptions {
@@ -46,19 +55,38 @@ export class Blueprint extends ParentBlueprint {
     };
 
     const options = Object.assign(typeCheck, options_);
-
     this.state = {
       options,
     };
   }
 
-  override synth(): void {
+  override async synth(): Promise<void> {
     const durablePathToBundle = path.join(this.context.durableStoragePath, 'input-bundle', makeHash(this.state.options.clone.location));
-
     if (!fs.existsSync(durablePathToBundle)) {
-      // dont do some stuff
+      fs.mkdirSync(durablePathToBundle, { recursive: true });
+      const outputLocation = path.join(durablePathToBundle, 'bundle.zip');
+
+      console.log('pulling bundle into ' + durablePathToBundle);
+
+      console.log(durablePathToBundle);
+      try {
+        await writeAsFile(this.state.options.clone.location, outputLocation);
+        await unpackBundle(outputLocation);
+        //unpack bundle
+        console.log('File written successfully!');
+      } catch (error: any) {
+        console.error('Error writing file:', error);
+        this.throwSynthesisError(
+          new BlueprintSynthesisError({
+            message: error as string,
+            type: BlueprintSynthesisErrorTypes.BlueprintSynthesisError,
+          }),
+        );
+      }
     }
-    super.synth();
+    console.log('getting here');
+    console.log(durablePathToBundle);
+    // super.synth();
   }
 }
 

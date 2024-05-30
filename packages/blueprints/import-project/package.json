@@ -56,7 +56,7 @@
     "@amazon-codecatalyst/blueprint-component.workflows": "^0.3.82",
     "@amazon-codecatalyst/blueprints.blueprint": "^0.3.82",
     "projen": "0.71.112",
-    "yaml": "*"
+    "unzipper": "*"
   },
   "resolutions": {
     "@aws-sdk/client-codecatalyst": "3.414.0",

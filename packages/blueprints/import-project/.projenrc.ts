@@ -18,15 +18,16 @@ const project = new ProjenBlueprint({
   npmignoreEnabled: true,
   tsconfig: {
     compilerOptions: {
+      lib: ['es2019', 'dom'],
       esModuleInterop: true,
       noImplicitAny: false,
     },
   },
   copyrightOwner: 'blueprints',
   deps: [
-    'yaml',
     '@amazon-codecatalyst/blueprints.blueprint',
     'projen',
+    'unzipper',
     '@amazon-codecatalyst/blueprint-component.workflows',
     '@amazon-codecatalyst/blueprint-component.source-repositories',
     '@amazon-codecatalyst/blueprint-component.environments',

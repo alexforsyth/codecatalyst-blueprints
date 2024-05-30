@@ -100,7 +100,7 @@
       "type": "runtime"
     },
     {
-      "name": "yaml",
+      "name": "unzipper",
       "type": "runtime"
     }
   ],
